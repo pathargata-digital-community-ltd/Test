@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>পাথরঘাটা ডিজিটাল</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-100">
+    <!-- ১. স্প্ল্যাশ স্ক্রিন -->
+    <div id="splash-screen" class="fixed inset-0 bg-green-600 z-[999] flex items-center justify-center text-white">
+        <h2 class="text-2xl font-bold">লোড হচ্ছে...</h2>
+    </div>
+
+    <!-- ২. অথ স্ক্রিন -->
+    <div id="auth-screen" class="hidden fixed inset-0 bg-white z-[200] p-6 flex flex-col justify-center">
+        <button onclick="handleLogin()" class="bg-green-600 text-white p-3 rounded">লগইন করুন (টেস্ট)</button>
+    </div>
+
+    <!-- ৩. মেইন অ্যাপ -->
+    <div id="main-app" class="hidden max-w-[480px] mx-auto bg-white min-h-screen">
+        <header class="p-4 border-b">পাথরঘাটা ডিজিটাল</header>
+        <main id="content-pages">
+            <div id="page-home">হোম পেজ</div>
+            <div id="page-profile" class="hidden">প্রোফাইল পেজ</div>
+        </main>
+        <nav class="fixed bottom-0 w-full max-w-[480px] bg-white border-t flex justify-around p-3">
+            <button onclick="switchPage('home')">হোম</button>
+            <button onclick="switchPage('profile')">প্রোফাইল</button>
+        </nav>
+    </div>
+
+    <!-- মডুলার স্ক্রিপ্ট লিঙ্ক -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
