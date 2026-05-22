@@ -1,37 +1,350 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>পাথরঘাটা ডিজিটাল</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Pathargata Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-gray-100">
-    <!-- ১. স্প্ল্যাশ স্ক্রিন -->
-    <div id="splash-screen" class="fixed inset-0 bg-green-600 z-[999] flex items-center justify-center text-white">
-        <h2 class="text-2xl font-bold">লোড হচ্ছে...</h2>
+<body>
+
+<!-- ========== TOPBAR ========== -->
+<header class="topbar">
+  <div class="logo-mark">🌿</div>
+  <span class="logo-name">Pathargata Digital</span>
+  <div class="top-spacer"></div>
+  <button class="icon-btn" onclick="openNotif()">
+    <i class="fas fa-bell"></i>
+    <span class="notif-dot"></span>
+  </button>
+  <button class="icon-btn">
+    <i class="fas fa-comment-dots"></i>
+  </button>
+  <img src="https://i.pravatar.cc/100?img=12" class="my-avatar" alt="আমি" onclick="switchPage('profile')">
+</header>
+
+<!-- ========== PAGE WRAPPER ========== -->
+<div class="pages">
+
+  <!-- ===== HOME PAGE ===== -->
+  <div class="page active" id="page-home">
+
+    <!-- Stories -->
+    <div class="stories-scroll">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+        <div class="story-add-ring" onclick="openPostSheet()"><i class="fas fa-plus"></i></div>
+        <span class="story-label">যোগ করুন</span>
+      </div>
+      <div class="story-bubble" onclick="viewStory(0)">
+        <div class="story-ring"><img src="https://i.pravatar.cc/100?img=5" alt=""></div>
+        <span class="story-label">রাহেলা</span>
+      </div>
+      <div class="story-bubble" onclick="viewStory(1)">
+        <div class="story-ring"><img src="https://i.pravatar.cc/100?img=7" alt=""></div>
+        <span class="story-label">করিম</span>
+      </div>
+      <div class="story-bubble" onclick="viewStory(2)">
+        <div class="story-ring" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+          <img src="https://i.pravatar.cc/100?img=9" alt="">
+        </div>
+        <span class="story-label">সানজিদা</span>
+      </div>
+      <div class="story-bubble" onclick="viewStory(3)">
+        <div class="story-ring" style="background:linear-gradient(135deg,#ec4899,#7c3aed)">
+          <img src="https://i.pravatar.cc/100?img=15" alt="">
+        </div>
+        <span class="story-label">তানভীর</span>
+      </div>
+      <div class="story-bubble" onclick="viewStory(4)">
+        <div class="story-ring seen"><img src="https://i.pravatar.cc/100?img=20" alt=""></div>
+        <span class="story-label">নাসরিন</span>
+      </div>
     </div>
 
-    <!-- ২. অথ স্ক্রিন -->
-    <div id="auth-screen" class="hidden fixed inset-0 bg-white z-[200] p-6 flex flex-col justify-center">
-        <button onclick="handleLogin()" class="bg-green-600 text-white p-3 rounded">লগইন করুন (টেস্ট)</button>
+    <!-- Create bar -->
+    <div class="create-bar" onclick="openPostSheet()">
+      <img src="https://i.pravatar.cc/100?img=12"
+        style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,212,170,0.3);flex-shrink:0" alt="">
+      <div class="create-placeholder">আপনার মনের কথা শেয়ার করুন...</div>
+      <div class="create-icons">
+        <div class="create-icon" style="background:rgba(34,197,94,.15);color:#22c55e"><i class="fas fa-image"></i></div>
+        <div class="create-icon" style="background:rgba(245,158,11,.15);color:#f59e0b"><i class="fas fa-video"></i></div>
+      </div>
     </div>
 
-    <!-- ৩. মেইন অ্যাপ -->
-    <div id="main-app" class="hidden max-w-[480px] mx-auto bg-white min-h-screen">
-        <header class="p-4 border-b">পাথরঘাটা ডিজিটাল</header>
-        <main id="content-pages">
-            <div id="page-home">হোম পেজ</div>
-            <div id="page-profile" class="hidden">প্রোফাইল পেজ</div>
-        </main>
-        <nav class="fixed bottom-0 w-full max-w-[480px] bg-white border-t flex justify-around p-3">
-            <button onclick="switchPage('home')">হোম</button>
-            <button onclick="switchPage('profile')">প্রোফাইল</button>
-        </nav>
+    <!-- Posts (JS দিয়ে ইনজেক্ট হবে) -->
+    <div id="home-posts"></div>
+  </div>
+
+  <!-- ===== EXPLORE PAGE ===== -->
+  <div class="page" id="page-explore">
+    <div class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input type="search" class="search-box" placeholder="মানুষ, জায়গা, ট্যাগ খুঁজুন...">
     </div>
 
-    <!-- মডুলার স্ক্রিপ্ট লিঙ্ক -->
-    <script type="module" src="js/main.js"></script>
+    <div class="section-head">
+      <h2><i class="fas fa-fire"></i> ট্রেন্ডিং</h2>
+    </div>
+    <div class="trend-pills">
+      <div class="trend-pill">#বরিশাল_উৎসব</div>
+      <div class="trend-pill">#আমার_Pathargata</div>
+      <div class="trend-pill">#গ্রামের_বাড়ি</div>
+      <div class="trend-pill">#কৃষি_খবর</div>
+      <div class="trend-pill">#ঈদের_আনন্দ</div>
+      <div class="trend-pill">#নদীর_পাড়</div>
+    </div>
+
+    <div class="section-head">
+      <h2><i class="fas fa-compass"></i> এক্সপ্লোর</h2>
+    </div>
+    <div class="explore-grid">
+      <div class="explore-item" onclick="viewStory(1)">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600" alt="" loading="lazy">
+        <div class="explore-overlay"><span class="explore-label">পাহাড়ের সৌন্দর্য</span></div>
+      </div>
+      <div class="explore-item" onclick="viewStory(2)">
+        <img src="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=400" alt="" loading="lazy">
+        <div class="explore-overlay"><span class="explore-label">নদীর ধারে</span></div>
+      </div>
+      <div class="explore-item" onclick="viewStory(3)">
+        <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400" alt="" loading="lazy">
+        <div class="explore-overlay"><span class="explore-label">ফুলের মাঠ</span></div>
+      </div>
+      <div class="explore-item" onclick="viewStory(0)">
+        <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600" alt="" loading="lazy">
+        <div class="explore-overlay"><span class="explore-label">সবুজ প্রকৃতি</span></div>
+      </div>
+      <div class="explore-item">
+        <img src="https://images.unsplash.com/photo-1491895200222-0fc4a4c35e18?w=400" alt="" loading="lazy">
+        <div class="explore-overlay"><span class="explore-label">গ্রামের পথ</span></div>
+      </div>
+      <div class="explore-item">
+        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400" alt="" loading="lazy">
+        <div class="explore-overlay"><span class="explore-label">ফসলের মাঠ</span></div>
+      </div>
+      <div class="explore-item">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=400" alt="" loading="lazy">
+        <div class="explore-overlay"><span class="explore-label">পুরনো স্কুল</span></div>
+      </div>
+      <div class="explore-item">
+        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400" alt="" loading="lazy">
+        <div class="explore-overlay"><span class="explore-label">সূর্যোদয়</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REELS PAGE ===== -->
+  <div class="page" id="page-reels">
+    <div class="reels-container" id="reels-list"></div>
+  </div>
+
+  <!-- ===== NOTIFICATIONS PAGE ===== -->
+  <div class="page" id="page-notif">
+    <div class="section-head">
+      <h2><i class="fas fa-user-plus"></i> পরিচিত হতে পারেন</h2>
+    </div>
+    <div class="suggest-row">
+      <div class="suggest-card">
+        <img src="https://i.pravatar.cc/100?img=33" alt="">
+        <div class="suggest-card-name">আরিফ হোসেন</div>
+        <div class="suggest-card-mutual">৫ মিউচুয়াল</div>
+        <button class="btn-follow" onclick="toggleFollow(this)">ফলো</button>
+      </div>
+      <div class="suggest-card">
+        <img src="https://i.pravatar.cc/100?img=44" alt="">
+        <div class="suggest-card-name">মিতু আক্তার</div>
+        <div class="suggest-card-mutual">৩ মিউচুয়াল</div>
+        <button class="btn-follow" onclick="toggleFollow(this)">ফলো</button>
+      </div>
+      <div class="suggest-card">
+        <img src="https://i.pravatar.cc/100?img=56" alt="">
+        <div class="suggest-card-name">জাহিদুল ইসলাম</div>
+        <div class="suggest-card-mutual">৮ মিউচুয়াল</div>
+        <button class="btn-follow" onclick="toggleFollow(this)">ফলো</button>
+      </div>
+      <div class="suggest-card">
+        <img src="https://i.pravatar.cc/100?img=61" alt="">
+        <div class="suggest-card-name">ফারহানা বেগম</div>
+        <div class="suggest-card-mutual">২ মিউচুয়াল</div>
+        <button class="btn-follow" onclick="toggleFollow(this)">ফলো</button>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="notif-group-label">নতুন</div>
+      <div class="notif-item unread">
+        <img src="https://i.pravatar.cc/100?img=5" class="n-av" alt="">
+        <div class="n-content">
+          <div class="n-text"><strong>রাহেলা বেগম</strong> আপনার পোস্টে ❤️ রিয়েক্ট করেছেন</div>
+          <div class="n-time">২ মিনিট আগে</div>
+        </div>
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80" class="n-thumb" alt="">
+        <div class="n-dot"></div>
+      </div>
+      <div class="notif-item unread">
+        <img src="https://i.pravatar.cc/100?img=7" class="n-av" alt="">
+        <div class="n-content">
+          <div class="n-text"><strong>করিম সাহেব</strong> আপনাকে ফলো করতে শুরু করেছেন</div>
+          <div class="n-time">১৫ মিনিট আগে</div>
+        </div>
+        <div class="n-dot"></div>
+      </div>
+      <div class="notif-item unread">
+        <img src="https://i.pravatar.cc/100?img=9" class="n-av" alt="">
+        <div class="n-content">
+          <div class="n-text"><strong>সানজিদা আক্তার</strong> আপনার ছবিতে মন্তব্য করেছেন: "অসাধারণ!"</div>
+          <div class="n-time">১ ঘণ্টা আগে</div>
+        </div>
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=80" class="n-thumb" alt="">
+        <div class="n-dot"></div>
+      </div>
+
+      <div class="notif-group-label" style="margin-top:10px">আগের</div>
+      <div class="notif-item">
+        <img src="https://i.pravatar.cc/100?img=15" class="n-av" alt="">
+        <div class="n-content">
+          <div class="n-text"><strong>তানভীর হোসেন</strong> আপনার পোস্ট শেয়ার করেছেন</div>
+          <div class="n-time">৩ ঘণ্টা আগে</div>
+        </div>
+      </div>
+      <div class="notif-item">
+        <img src="https://i.pravatar.cc/100?img=20" class="n-av" alt="">
+        <div class="n-content">
+          <div class="n-text"><strong>নাসরিন জাহান</strong> আপনার স্টোরি দেখেছেন</div>
+          <div class="n-time">৫ ঘণ্টা আগে</div>
+        </div>
+      </div>
+      <div class="notif-item">
+        <img src="https://i.pravatar.cc/100?img=33" class="n-av" alt="">
+        <div class="n-content">
+          <div class="n-text"><strong>আরিফ হোসেন</strong> আপনার পোস্টে 😍 রিয়েক্ট করেছেন</div>
+          <div class="n-time">গতকাল</div>
+        </div>
+        <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=80" class="n-thumb" alt="">
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PROFILE PAGE ===== -->
+  <div class="page" id="page-profile">
+    <div class="profile-cover">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="">
+      <div class="profile-cover-overlay"></div>
+      <div class="profile-avatar-wrap">
+        <img src="https://i.pravatar.cc/100?img=12" class="profile-big-av" alt="">
+      </div>
+    </div>
+
+    <div class="profile-info">
+      <div class="profile-name">আমি <span class="vc"><i class="fas fa-circle-check"></i></span></div>
+      <div class="profile-handle">@ami.upazila · বরিশাল, বাংলাদেশ 🇧🇩</div>
+      <div class="profile-bio">প্রকৃতি ভালোবাসি 🌿 গ্রাম-বাংলার গল্প বলি। Pathargata Digital র মানুষদের সাথে সংযুক্ত থাকতে চাই।</div>
+    </div>
+
+    <div class="profile-stats">
+      <div class="pstat"><div class="pstat-num">৪৭</div><div class="pstat-label">পোস্ট</div></div>
+      <div class="pstat"><div class="pstat-num">১.২ হা</div><div class="pstat-label">ফলোয়ার</div></div>
+      <div class="pstat"><div class="pstat-num">৩৮৫</div><div class="pstat-label">ফলোয়িং</div></div>
+    </div>
+
+    <div class="profile-actions" style="padding:0 14px">
+      <button class="btn-edit">প্রোফাইল সম্পাদনা</button>
+      <button class="btn-share-prof"><i class="fas fa-share-nodes"></i></button>
+    </div>
+
+    <div style="padding:16px 14px 10px">
+      <div class="section-head"><h2><i class="fas fa-grid-2"></i> পোস্টসমূহ</h2></div>
+    </div>
+
+    <div class="profile-posts-grid" style="padding:0 14px">
+      <div class="pgrid-item"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200" alt="" loading="lazy"></div>
+      <div class="pgrid-item"><img src="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=200" alt="" loading="lazy"></div>
+      <div class="pgrid-item"><img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=200" alt="" loading="lazy"></div>
+      <div class="pgrid-item"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=200" alt="" loading="lazy"></div>
+      <div class="pgrid-item"><img src="https://images.unsplash.com/photo-1491895200222-0fc4a4c35e18?w=200" alt="" loading="lazy"></div>
+      <div class="pgrid-item"><img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=200" alt="" loading="lazy"></div>
+      <div class="pgrid-item"><img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=200" alt="" loading="lazy"></div>
+      <div class="pgrid-item"><img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=200" alt="" loading="lazy"></div>
+      <div class="pgrid-item"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&q=50" alt="" loading="lazy"></div>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+
+</div><!-- /pages -->
+
+<!-- ========== BOTTOM NAV ========== -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="switchPage('home')">
+    <i class="fas fa-house"></i><span>হোম</span>
+  </button>
+  <button class="nav-btn" id="nav-explore" onclick="switchPage('explore')">
+    <i class="fas fa-compass"></i><span>এক্সপ্লোর</span>
+  </button>
+  <button class="nav-post-btn" onclick="openPostSheet()">
+    <div class="post-circle"><i class="fas fa-plus"></i></div>
+    <span style="font-size:10px;color:var(--text3);font-weight:500">পোস্ট</span>
+  </button>
+  <button class="nav-btn" id="nav-reels" onclick="switchPage('reels')">
+    <i class="fas fa-clapperboard"></i><span>রিলস</span>
+    <span class="nav-badge">৩</span>
+  </button>
+  <button class="nav-btn" id="nav-notif" onclick="switchPage('notif')">
+    <i class="fas fa-bell"></i><span>নোটিফ</span>
+    <span class="nav-badge">৪</span>
+  </button>
+</nav>
+
+<!-- ========== POST SHEET ========== -->
+<div class="sheet-overlay" id="postSheet" onclick="closePostSheet(event)">
+  <div class="bottom-sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">নতুন পোস্ট</div>
+    <div class="sheet-body">
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:12px">
+        <img src="https://i.pravatar.cc/100?img=12"
+          style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,212,170,0.4);flex-shrink:0" alt="">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text1)">আমি</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:2px">🌍 পাবলিক</div>
+        </div>
+      </div>
+      <textarea class="post-textarea" id="postText"
+        placeholder="আপনার মনের কথা লিখুন...&#10;&#10;#PathargataDigital #বাংলাদেশ"></textarea>
+      <div class="sheet-media-row">
+        <button class="media-chip"><i class="fas fa-image" style="color:#22c55e"></i> ছবি</button>
+        <button class="media-chip"><i class="fas fa-video" style="color:#f59e0b"></i> ভিডিও</button>
+        <button class="media-chip"><i class="fas fa-map-marker-alt" style="color:#ef4444"></i> স্থান</button>
+        <button class="media-chip"><i class="fas fa-smile" style="color:#ec4899"></i> অনুভূতি</button>
+      </div>
+      <button class="btn-publish" onclick="publishPost()">🚀 পোস্ট করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== STORY VIEWER ========== -->
+<div class="story-viewer" id="storyViewer">
+  <div class="sv-topbar">
+    <div class="sv-prog-bars" id="svBars"></div>
+    <div class="sv-author" id="svAuthor"></div>
+  </div>
+  <div class="sv-img-wrap" id="svImgWrap" onclick="nextStory()">
+    <img class="sv-img" id="svImg" src="" alt="">
+  </div>
+  <button class="sv-close"
+    style="position:absolute;top:14px;right:14px;z-index:20"
+    onclick="closeStoryViewer()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+
+<!-- ✅ ES Module — type="module" বাধ্যতামূলক -->
+<script type="module" src="js/main.js"></script>
+
 </body>
 </html>
